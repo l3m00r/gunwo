@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GUNWO.DE</title>
+    <link rel="stylesheet" href="ext/resources/css/ext-all.css" />
+	<link rel="stylesheet" href="css/main.css" />
+    <script src="ext/ext-all.js"></script>
+    <script src="remote/api.php"></script>
+	<script>
+                
+                var win = null;
+                
+		Ext.require([
+			'Ext.window.Window',
+			'Ext.tab.*',
+			'Ext.toolbar.Spacer',
+			'Ext.layout.container.Card',
+			'Ext.layout.container.Border'
+		]);	
+	
+		Ext.onReady(function(){
+			Ext.Direct.addProvider(Services.API);
+                        Services.Now.selectSample(function(obj, response) {
+                            if(obj == undefined || response.type == 'exception') {
+                                var stacktrace = response.where.replace(/#/g, '<br />');
+                                
+                                win = Ext.create('widget.window', {
+                                        height: 200,
+                                        width: 400,
+                                        title: response.message,
+                                        closable: false,
+                                        plain: true,
+                                        layout: 'fit',
+                                        html: stacktrace
+                                });
+                            }
+                            else
+                            {
+                                win = Ext.create('widget.window', {
+                                    height: 200,
+                                    width: 400,
+                                    title: 'Alles.klar',
+                                    closable: false,
+                                    plain: true,
+                                    layout: 'fit'
+                                });
+                            }
+                            win.show();
+                        });
+		});
+	</script>
+</head>
+<body>
+</body>
+</html>
